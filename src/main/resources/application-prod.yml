@@ -2,8 +2,13 @@ spring:
   application:
     name: story-keeper-backend
   
+  # Database Configuration
+  # Set DB_PROVIDER environment variable (defaults to postgresql)
+  # Database connection configured via DATABASE_URL or individual DB_* variables
+  # Hibernate dialect is automatically configured based on DB_PROVIDER.
+  
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    # database-platform is set dynamically based on DB_PROVIDER via JpaConfig
     hibernate:
       ddl-auto: validate  # Never auto-create/update schema in production
     show-sql: false  # Disable SQL logging in production

@@ -1,72 +1,62 @@
 package com.storykeeper.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import javax.sql.DataSource;
-import java.net.URI;
+import com.storykeeper.config.database.DatabaseConfig;
+import com.storykeeper.config.database.DatabaseConfigurationService;
+import com.storykeeper.config.database.DatabaseProvider;
+import com.storykeeper.config.database.DatabaseProviderFactory;
 
+/**
+ * Main application configuration.
+ * Now uses modular abstraction layers for database and configuration providers.
+ * 
+ * To switch database providers, set DB_PROVIDER environment variable:
+ * - postgresql (default)
+ * - h2 (for local development)
+ * - mysql (if MySQLProvider is implemented)
+ * 
+ * To switch configuration providers, implement ConfigurationProvider interface
+ * and configure it as the primary bean.
+ */
 @Configuration
 public class AppConfig {
 
-    @Value("${DATABASE_URL:}")
-    private String databaseUrl;
+	private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
-    @Value("${DB_HOST:localhost}")
-    private String dbHost;
+	private final DatabaseConfigurationService databaseConfigService;
+	private final DatabaseProviderFactory providerFactory;
 
-    @Value("${DB_PORT:5432}")
-    private String dbPort;
+	@Autowired
+	public AppConfig(DatabaseConfigurationService databaseConfigService,
+	                 DatabaseProviderFactory providerFactory) {
+		this.databaseConfigService = databaseConfigService;
+		this.providerFactory = providerFactory;
+	}
 
-    @Value("${DB_NAME:storykeeper}")
-    private String dbName;
-
-    @Value("${DB_USERNAME:postgres}")
-    private String dbUsername;
-
-    @Value("${DB_PASSWORD:}")
-    private String dbPassword;
-
-    @Bean
-    @Primary
-    public DataSource dataSource() {
-        DataSourceBuilder<?> builder = DataSourceBuilder.create();
-        
-        // If DATABASE_URL is provided (e.g., from Render), parse it
-        if (databaseUrl != null && !databaseUrl.isEmpty()) {
-            try {
-                // Handle postgresql:// format from Render
-                if (databaseUrl.startsWith("postgresql://") || databaseUrl.startsWith("postgres://")) {
-                    URI dbUri = new URI(databaseUrl.replace("postgresql://", "http://").replace("postgres://", "http://"));
-                    String username = dbUri.getUserInfo().split(":")[0];
-                    String password = dbUri.getUserInfo().split(":")[1];
-                    String host = dbUri.getHost();
-                    int port = dbUri.getPort() == -1 ? 5432 : dbUri.getPort();
-                    String path = dbUri.getPath().replaceFirst("/", "");
-                    
-                    builder.url("jdbc:postgresql://" + host + ":" + port + "/" + path);
-                    builder.username(username);
-                    builder.password(password);
-                } else {
-                    // Already in JDBC format
-                    builder.url(databaseUrl);
-                    builder.username(dbUsername);
-                    builder.password(dbPassword);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to parse DATABASE_URL", e);
-            }
-        } else {
-            // Use individual environment variables
-            builder.url("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName);
-            builder.username(dbUsername);
-            builder.password(dbPassword);
-        }
-        
-        builder.driverClassName("org.postgresql.Driver");
-        return builder.build();
-    }
+	@Bean
+	@Primary
+	public DataSource dataSource() {
+		logger.info("Initializing DataSource using modular configuration system");
+		
+		// Load database configuration from the centralized service
+		DatabaseConfig config = databaseConfigService.loadDatabaseConfig();
+		
+		// Get the provider name that was used to load the config
+		String providerName = databaseConfigService.getProviderName();
+		DatabaseProvider provider = providerFactory.getProvider(providerName);
+		
+		// Create DataSource using the provider
+		DataSource dataSource = provider.createDataSource(config);
+		
+		logger.info("DataSource created successfully using provider: {}", providerName);
+		return dataSource;
+	}
 }
