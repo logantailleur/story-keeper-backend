@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: story-keeper-backend
+  
+  # Database Configuration
+  # Note: DataSource is configured programmatically in AppConfig.java
+  # It reads from environment variables: DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD
+  # or DATABASE_URL (for Render compatibility)
+  
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none  # Disable automatic schema creation for local development
+    show-sql: true  # Log SQL queries for debugging
+    properties:
+      hibernate:
+        format_sql: true  # Format SQL queries for better readability
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.storykeeper: DEBUG
+    org.hibernate.SQL: DEBUG  # Log all SQL statements
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Log SQL parameter values

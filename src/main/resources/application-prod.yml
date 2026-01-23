@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: story-keeper-backend
+  
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate  # Never auto-create/update schema in production
+    show-sql: false  # Disable SQL logging in production
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+# Logging Configuration (production-optimized)
+logging:
+  level:
+    root: INFO
+    com.storykeeper: INFO  # Production logging level
+    org.springframework.web: WARN
+    org.hibernate: WARN
