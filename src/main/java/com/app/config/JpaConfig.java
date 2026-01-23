@@ -1,4 +1,4 @@
-package com.storykeeper.config;
+package com.app.config;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomi
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.storykeeper.config.database.DatabaseConfigurationService;
+import com.app.config.database.DatabaseConfigurationService;
 
 /**
  * JPA/Hibernate configuration that dynamically sets the dialect
@@ -14,14 +14,14 @@ import com.storykeeper.config.database.DatabaseConfigurationService;
  */
 @Configuration
 public class JpaConfig {
-    
+
     private final DatabaseConfigurationService databaseConfigService;
-    
+
     @Autowired
     public JpaConfig(DatabaseConfigurationService databaseConfigService) {
         this.databaseConfigService = databaseConfigService;
     }
-    
+
     @Bean
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer() {
         return hibernateProperties -> {

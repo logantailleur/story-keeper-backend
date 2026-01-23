@@ -1,8 +1,8 @@
-package com.storykeeper.repository;
+package com.app.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.storykeeper.model.User;
+import com.app.model.User;
 
 @Repository
 public interface UserRepository extends BaseRepository<User, Long> {

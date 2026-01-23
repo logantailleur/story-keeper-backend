@@ -9,8 +9,8 @@ src/
 ├── main/
 │   ├── java/
 │   │   └── com/
-│   │       └── storykeeper/
-│   │           ├── StoryKeeperApplication.java
+│   │       └── app/
+│   │           ├── Application.java
 │   │           ├── config/          # Configuration classes
 │   │           ├── controller/       # REST controllers
 │   │           ├── service/          # Business logic services
@@ -21,7 +21,7 @@ src/
 └── test/
     └── java/
         └── com/
-            └── storykeeper/
+            └── app/
 ```
 
 ## Getting Started

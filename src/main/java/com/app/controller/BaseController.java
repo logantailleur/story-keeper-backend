@@ -1,4 +1,4 @@
-package com.storykeeper.controller;
+package com.app.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

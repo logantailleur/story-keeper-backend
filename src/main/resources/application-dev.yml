@@ -29,6 +29,6 @@ spring:
 logging:
   level:
     root: INFO
-    com.storykeeper: DEBUG
+    com.app: DEBUG
     org.hibernate.SQL: DEBUG  # Log all SQL statements
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Log SQL parameter values

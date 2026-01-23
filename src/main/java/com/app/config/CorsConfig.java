@@ -1,4 +1,4 @@
-package com.storykeeper.config;
+package com.app.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ public class CorsConfig {
 			public void addCorsMappings(@NonNull CorsRegistry registry) {
 				// Build list of origin patterns
 				List<String> originPatterns = buildOriginPatterns();
-				
+
 				registry.addMapping("/**") // apply to all endpoints
 						// Use allowedOriginPatterns for wildcard support (Spring 5.3+)
 						// This allows Vercel preview deployments (*.vercel.app)
@@ -46,16 +46,16 @@ public class CorsConfig {
 	 */
 	private List<String> buildOriginPatterns() {
 		List<String> patterns = new ArrayList<>();
-		
+
 		// Add localhost patterns for development
 		patterns.add("http://localhost:*");
 		patterns.add("http://127.0.0.1:*");
-		
+
 		// Add Vercel patterns (supports production and preview deployments)
 		// Production: https://story-keeper-frontend.vercel.app
 		// Previews: https://story-keeper-frontend-*.vercel.app
 		patterns.add("https://*.vercel.app");
-		
+
 		// Parse and add custom origins from environment variable
 		if (allowedOrigins != null && !allowedOrigins.trim().isEmpty()) {
 			Stream.of(allowedOrigins.split(","))
@@ -63,7 +63,7 @@ public class CorsConfig {
 					.filter(s -> !s.isEmpty())
 					.forEach(patterns::add);
 		}
-		
+
 		return patterns;
 	}
 }

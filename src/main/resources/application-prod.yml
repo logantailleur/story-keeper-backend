@@ -23,7 +23,7 @@ spring:
 logging:
   level:
     root: INFO
-    com.storykeeper: INFO  # Production logging level
+    com.app: INFO  # Production logging level
     org.springframework.web: WARN
     org.hibernate: WARN
 
