@@ -21,3 +21,6 @@ logging:
     com.storykeeper: INFO  # Production logging level
     org.springframework.web: WARN
     org.hibernate: WARN
+
+server:
+  port: ${PORT:8080}
