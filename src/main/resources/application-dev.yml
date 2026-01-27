@@ -15,6 +15,7 @@ spring:
 
     jpa:
         # database-platform is set dynamically based on DB_PROVIDER via JpaConfig
+        open-in-view: false # Disable Open Session In View pattern
         hibernate:
             ddl-auto: none # Disable automatic schema creation for local development
         show-sql: true # Log SQL queries for debugging
@@ -24,6 +25,9 @@ spring:
                 jdbc:
                     lob:
                         non_contextual_creation: true
+
+# JWT Configuration
+JWT_SECRET: "test-secret-key-for-jwt-service-testing-must-be-at-least-32-characters-long-for-hmac-sha256"
 
 # Logging Configuration
 logging:

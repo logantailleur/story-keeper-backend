@@ -6,5 +6,7 @@ import com.app.model.User;
 
 @Repository
 public interface UserRepository extends BaseRepository<User, Long> {
-	// Additional custom query methods can be added here if needed
+	User findByEmail(String email);
+
+	Boolean existsByEmail(String email);
 }

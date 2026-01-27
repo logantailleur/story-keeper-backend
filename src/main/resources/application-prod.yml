@@ -9,6 +9,7 @@ spring:
   
   jpa:
     # database-platform is set dynamically based on DB_PROVIDER via JpaConfig
+    open-in-view: false # Disable Open Session In View pattern
     hibernate:
       ddl-auto: validate  # Never auto-create/update schema in production
     show-sql: false  # Disable SQL logging in production
