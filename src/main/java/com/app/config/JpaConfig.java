@@ -1,33 +1,15 @@
 package com.app.config;
 
-import org.hibernate.cfg.AvailableSettings;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.app.config.database.DatabaseConfigurationService;
-
 /**
- * JPA/Hibernate configuration that dynamically sets the dialect
- * based on the configured database provider.
+ * JPA/Hibernate configuration.
+ * 
+ * Note: Hibernate 6+ automatically detects the dialect from the DataSource,
+ * so explicit dialect configuration is no longer needed.
  */
 @Configuration
 public class JpaConfig {
-
-    private final DatabaseConfigurationService databaseConfigService;
-
-    @Autowired
-    public JpaConfig(DatabaseConfigurationService databaseConfigService) {
-        this.databaseConfigService = databaseConfigService;
-    }
-
-    @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer() {
-        return hibernateProperties -> {
-            // Dynamically set the Hibernate dialect based on the database provider
-            String dialect = databaseConfigService.getHibernateDialect();
-            hibernateProperties.put(AvailableSettings.DIALECT, dialect);
-        };
-    }
+    // Hibernate dialect is now auto-detected from the DataSource
+    // No explicit configuration needed
 }

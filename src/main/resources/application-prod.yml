@@ -1,31 +1,29 @@
 spring:
-  application:
-    name: story-keeper-backend
-  
-  # Database Configuration
-  # Set DB_PROVIDER environment variable (defaults to postgresql)
-  # Database connection configured via DATABASE_URL or individual DB_* variables
-  # Hibernate dialect is automatically configured based on DB_PROVIDER.
-  
-  jpa:
-    # database-platform is set dynamically based on DB_PROVIDER via JpaConfig
-    hibernate:
-      ddl-auto: validate  # Never auto-create/update schema in production
-    show-sql: false  # Disable SQL logging in production
-    properties:
-      hibernate:
-        format_sql: false
-        jdbc:
-          lob:
-            non_contextual_creation: true
+    application:
+        name: story-keeper-backend
+
+    # Database Configuration
+    # Database connection configured via DATABASE_URL or individual DB_* variables
+
+    jpa:
+        open-in-view: false # Disable Open Session In View pattern
+        hibernate:
+            ddl-auto: validate # Never auto-create/update schema in production
+        show-sql: false # Disable SQL logging in production
+        properties:
+            hibernate:
+                format_sql: false
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
 
 # Logging Configuration (production-optimized)
 logging:
-  level:
-    root: INFO
-    com.app: INFO  # Production logging level
-    org.springframework.web: WARN
-    org.hibernate: WARN
+    level:
+        root: INFO
+        com.app: INFO # Production logging level
+        org.springframework.web: WARN
+        org.hibernate: WARN
 
 server:
-  port: ${PORT:8080}
+    port: ${PORT:8080}

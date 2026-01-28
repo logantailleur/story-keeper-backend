@@ -27,6 +27,7 @@ src/
 ## Getting Started
 
 ### Prerequisites
+
 - Java 17 or higher
 - Maven 3.6+
 
@@ -38,14 +39,11 @@ mvn spring-boot:run
 
 The application will start on `http://localhost:8080`
 
-### H2 Console
-
-Access the H2 database console at: `http://localhost:8080/h2-console`
-
 ## Technology Stack
 
 - Spring Boot 3.2.0
 - Spring Data JPA
-- H2 Database (for development)
+- H2 Database (test-only; optional)
 - Maven
+
 # story-keeper-backend
