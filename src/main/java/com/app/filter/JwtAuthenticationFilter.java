@@ -2,7 +2,6 @@ package com.app.filter;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,11 +34,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private static final String AUTHORIZATION_HEADER = "Authorization";
 	private static final String BEARER_PREFIX = "Bearer ";
 
-	@Autowired
-	private JwtService jwtService;
+	private final JwtService jwtService;
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
+
+	public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+		this.jwtService = jwtService;
+		this.userDetailsService = userDetailsService;
+	}
 
 	@Override
 	protected void doFilterInternal(@org.springframework.lang.NonNull HttpServletRequest request,
@@ -49,7 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String authHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-		// If no Authorization header or doesn't start with "Bearer ", continue without authentication
+		// If no Authorization header or doesn't start with "Bearer ", continue without
+		// authentication
 		if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
 			filterChain.doFilter(request, response);
 			return;

@@ -3,18 +3,12 @@ spring:
         name: story-keeper-backend
 
     # Database Configuration
-    # Set DB_PROVIDER environment variable to switch providers:
-    # - postgresql (default) - PostgreSQL database
-    # - h2 - H2 in-memory database (useful for quick local testing)
-    #
-    # Database connection can be configured via:
-    # - DATABASE_URL (full connection string)
+    # Database connection is configured via:
+    # - spring.datasource.url (explicit JDBC URL, good for local overrides)
+    # - DATABASE_URL (Render/Heroku style: postgres://user:pass@host:port/db)
     # - Individual variables: DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD
-    #
-    # Note: Hibernate dialect is automatically configured based on DB_PROVIDER.
 
     jpa:
-        # database-platform is set dynamically based on DB_PROVIDER via JpaConfig
         open-in-view: false # Disable Open Session In View pattern
         hibernate:
             ddl-auto: none # Disable automatic schema creation for local development

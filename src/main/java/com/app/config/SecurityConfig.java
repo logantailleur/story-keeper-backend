@@ -1,8 +1,8 @@
 package com.app.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,29 +26,32 @@ import com.app.filter.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Autowired
-	private JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+	public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			// Disable CSRF for API-only application
-			.csrf(csrf -> csrf.disable())
-			// Enable CORS (uses CorsConfig bean)
-			.cors(cors -> {})
-			// Stateless session management (JWT-based)
-			.sessionManagement(session -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			// Authorization rules
-			.authorizeHttpRequests(auth -> auth
-				// Public endpoints
-				.requestMatchers("/api/login", "/api/register").permitAll()
-				// Secure everything else under /api/**
-				.requestMatchers("/api/**").authenticated()
-				// All other requests (non-API) are permitted
-				.anyRequest().permitAll())
-			// Add JWT filter before UsernamePasswordAuthenticationFilter
-			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+				// Disable CSRF for API-only application
+				.csrf(csrf -> csrf.disable())
+				// Enable CORS (uses CorsConfig bean)
+				.cors(Customizer.withDefaults())
+				// Stateless session management (JWT-based)
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				// Authorization rules
+				.authorizeHttpRequests(auth -> auth
+						// Public endpoints
+						.requestMatchers("/api/login", "/api/register", "/api/health").permitAll()
+						// Secure everything else under /api/**
+						.requestMatchers("/api/**").authenticated()
+						// All other requests (non-API) are permitted
+						.anyRequest().permitAll())
+				// Add JWT filter before UsernamePasswordAuthenticationFilter
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

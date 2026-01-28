@@ -23,11 +23,10 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest
 @TestPropertySource(properties = {
 		"JWT_SECRET=test-secret-key-for-jwt-service-testing-must-be-at-least-32-characters-long-for-hmac-sha256",
-		"DB_PROVIDER=h2",
 		"spring.datasource.url=jdbc:h2:mem:testdb",
 		"spring.datasource.driver-class-name=org.h2.Driver",
 		"spring.jpa.hibernate.ddl-auto=create-drop",
-		"spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
+		"spring.jpa.database-platform="
 })
 class JwtServiceTest {
 
