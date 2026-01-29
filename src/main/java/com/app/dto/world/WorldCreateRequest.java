@@ -1,5 +1,7 @@
 package com.app.dto.world;
 
+import com.app.model.User;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +23,9 @@ public class WorldCreateRequest {
 	@NotBlank(message = "Description is required")
 	@Size(max = 1000, message = "Description must be less than 1000 characters")
 	private String description;
+
+	@NotNull(message = "User is required")
+	private User user;
 
 	public String getName() {
 		return name;
@@ -52,5 +57,13 @@ public class WorldCreateRequest {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
