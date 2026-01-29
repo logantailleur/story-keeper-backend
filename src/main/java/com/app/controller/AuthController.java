@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.dto.AuthResponse;
-import com.app.dto.LoginRequest;
-import com.app.dto.RegisterRequest;
-import com.app.dto.UserResponse;
+import com.app.dto.auth.AuthResponse;
+import com.app.dto.auth.LoginRequest;
+import com.app.dto.auth.RegisterRequest;
+import com.app.dto.user.UserResponse;
 import com.app.model.User;
 import com.app.service.AuthService;
 

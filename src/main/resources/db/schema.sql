@@ -5,3 +5,16 @@ CREATE TABLE IF NOT EXISTS "users" (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS "worlds" (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    start_year INTEGER NOT NULL,
+    current_year INTEGER,
+    description VARCHAR(1000),
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_world_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT chk_start_year_before_current_year CHECK (start_year <= current_year)
+);
