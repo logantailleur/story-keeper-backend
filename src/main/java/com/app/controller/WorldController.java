@@ -1,8 +1,10 @@
 package com.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +27,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/worlds")
-public class WorldController {
+public class WorldController extends BaseController {
 
 	@Autowired
 	private WorldService worldService;
@@ -65,10 +67,11 @@ public class WorldController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteWorld(
+	public ResponseEntity<Map<String, String>> deleteWorld(
 			@AuthenticationPrincipal UserDetails userDetails,
 			@PathVariable Long id) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
 		worldService.deleteWorld(currentUser, id);
+		return deleteSuccessResponse("World");
 	}
 }
