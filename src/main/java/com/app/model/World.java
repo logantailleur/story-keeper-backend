@@ -96,4 +96,14 @@ public class World extends BaseEntity {
 	public boolean isStartYearBeforeCurrentYear() {
 		return startYear <= currentYear;
 	}
+
+	@AssertTrue(message = "Current year must be greater than 0")
+	public boolean isCurrentYearGreaterThan0() {
+		return currentYear > 0;
+	}
+
+	@AssertTrue(message = "Start year must be greater than or equal to 0")
+	public boolean isStartYearGreaterThanOrEqualTo0() {
+		return startYear >= 0;
+	}
 }

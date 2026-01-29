@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.app.dto.world.WorldCreateRequest;
 import com.app.dto.world.WorldResponse;
 import com.app.dto.world.WorldUpdateRequest;
+import com.app.exception.WorldNotFoundException;
 import com.app.model.User;
 import com.app.model.World;
 import com.app.repository.WorldRepository;
@@ -32,7 +33,7 @@ public class WorldService {
 
 	public WorldResponse getWorldById(User currentUser, Long id) {
 		World world = worldRepository.findByIdAndUser(id, currentUser)
-				.orElseThrow(() -> new RuntimeException("World not found with id: " + id));
+				.orElseThrow(() -> new WorldNotFoundException(id));
 		return toResponse(world);
 	}
 
@@ -42,12 +43,13 @@ public class WorldService {
 		for (World world : worlds) {
 			responses.add(toResponse(world));
 		}
+
 		return responses;
 	}
 
 	public WorldResponse updateWorld(User currentUser, Long id, WorldUpdateRequest request) {
 		World world = worldRepository.findByIdAndUser(id, currentUser)
-				.orElseThrow(() -> new RuntimeException("World not found with id: " + id));
+				.orElseThrow(() -> new WorldNotFoundException(id));
 
 		if (request.getName() != null) {
 			world.setName(request.getName());
@@ -68,7 +70,7 @@ public class WorldService {
 
 	public void deleteWorld(User currentUser, Long id) {
 		World world = worldRepository.findByIdAndUser(id, currentUser)
-				.orElseThrow(() -> new RuntimeException("World not found with id: " + id));
+				.orElseThrow(() -> new WorldNotFoundException(id));
 		worldRepository.delete(world);
 	}
 
