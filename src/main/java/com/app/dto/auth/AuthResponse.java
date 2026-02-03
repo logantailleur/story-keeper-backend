@@ -1,4 +1,4 @@
-package com.app.dto;
+package com.app.dto.auth;
 
 /**
  * DTO for authentication response (register/login).

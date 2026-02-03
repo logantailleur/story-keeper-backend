@@ -12,10 +12,10 @@ spring:
         open-in-view: false # Disable Open Session In View pattern
         hibernate:
             ddl-auto: none # Disable automatic schema creation for local development
-        show-sql: true # Log SQL queries for debugging
+        show-sql: false # Disable SQL query logging
         properties:
             hibernate:
-                format_sql: true # Format SQL queries for better readability
+                format_sql: false # Disable SQL formatting
                 jdbc:
                     lob:
                         non_contextual_creation: true
@@ -27,6 +27,6 @@ JWT_SECRET: "test-secret-key-for-jwt-service-testing-must-be-at-least-32-charact
 logging:
     level:
         root: WARN
-        com.app: WARN
-        org.hibernate.SQL: DEBUG # Log all SQL statements
-        org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Log SQL parameter values
+        com.app: INFO
+        org.hibernate: WARN # Disable Hibernate logs
+        org.springframework.web.servlet.handler.HandlerMappingIntrospector: ERROR # Suppress cache miss warnings (harmless, occurs on first request)
