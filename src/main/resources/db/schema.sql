@@ -18,3 +18,14 @@ CREATE TABLE IF NOT EXISTS "worlds" (
     CONSTRAINT fk_world_user FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT chk_start_year_before_current_year CHECK (start_year <= current_year)
 );
+
+CREATE TABLE IF NOT EXISTS "events" (
+	id BIGSERIAL PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	year INTEGER NOT NULL,
+	description VARCHAR(1000),
+	world_id BIGINT NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT fk_event_world FOREIGN KEY (world_id) REFERENCES worlds(id) ON DELETE CASCADE
+);
