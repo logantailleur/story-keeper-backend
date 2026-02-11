@@ -27,6 +27,21 @@ public class AuthController {
 	@Autowired
 	private AuthService authService;
 
+	@GetMapping("/me")
+	public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails) {
+		try {
+			// Get email from UserDetails (username is email in our implementation)
+			String email = userDetails.getUsername();
+			User user = authService.getUserByEmail(email);
+			UserResponse response = new UserResponse(user.getId(), user.getEmail(), user.getCreatedAt());
+			return ResponseEntity.ok(response);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to retrieve user");
+		}
+	}
+
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 		try {
@@ -48,21 +63,6 @@ public class AuthController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed");
-		}
-	}
-
-	@GetMapping("/me")
-	public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails) {
-		try {
-			// Get email from UserDetails (username is email in our implementation)
-			String email = userDetails.getUsername();
-			User user = authService.getUserByEmail(email);
-			UserResponse response = new UserResponse(user.getId(), user.getEmail(), user.getCreatedAt());
-			return ResponseEntity.ok(response);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to retrieve user");
 		}
 	}
 }

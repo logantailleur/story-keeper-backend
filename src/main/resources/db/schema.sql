@@ -29,3 +29,17 @@ CREATE TABLE IF NOT EXISTS "events" (
 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT fk_event_world FOREIGN KEY (world_id) REFERENCES worlds(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS figures (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(20) NOT NULL CHECK (type IN ('PERSON', 'FACTION')),
+    description VARCHAR(1000),
+    world_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_figure_world
+        FOREIGN KEY (world_id)
+        REFERENCES worlds(id)
+        ON DELETE CASCADE
+);

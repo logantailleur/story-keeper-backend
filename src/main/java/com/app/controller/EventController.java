@@ -44,19 +44,19 @@ public class EventController extends BaseController {
 		return eventService.getEventsByWorldId(currentUser, worldId);
 	}
 
+	@GetMapping("/{id}")
+	public EventResponse getEventById(
+			@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+		User currentUser = authService.getUserByEmail(userDetails.getUsername());
+		return eventService.getEventByIdAndWorldId(currentUser, id);
+	}
+
 	@PostMapping
 	public EventResponse createEvent(
 			@AuthenticationPrincipal UserDetails userDetails,
 			@Valid @RequestBody EventCreateRequest request) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
 		return eventService.createEvent(currentUser, request);
-	}
-
-	@GetMapping("/{id}")
-	public EventResponse getEventById(
-			@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
-		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		return eventService.getEventByIdAndWorldId(currentUser, id);
 	}
 
 	@PatchMapping("/{id}")

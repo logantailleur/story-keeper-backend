@@ -14,64 +14,61 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.dto.world.WorldCreateRequest;
-import com.app.dto.world.WorldResponse;
-import com.app.dto.world.WorldUpdateRequest;
+import com.app.dto.figure.FigureCreateRequest;
+import com.app.dto.figure.FigureResponse;
+import com.app.dto.figure.FigureUpdateRequest;
 import com.app.model.User;
 import com.app.service.AuthService;
-import com.app.service.WorldService;
-
-import jakarta.validation.Valid;
+import com.app.service.FigureService;
 
 @RestController
-@RequestMapping("/api/worlds")
-public class WorldController extends BaseController {
+@RequestMapping("/api/figures")
+public class FigureController extends BaseController {
 
 	@Autowired
-	private WorldService worldService;
+	private FigureService figureService;
 
 	@Autowired
 	private AuthService authService;
 
 	@GetMapping
-	public List<WorldResponse> getUserWorlds(@AuthenticationPrincipal UserDetails userDetails) {
+	public List<FigureResponse> getFiguresByWorldId(
+			@RequestParam Long worldId,
+			@AuthenticationPrincipal UserDetails userDetails) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		return worldService.getUserWorlds(currentUser);
+		return figureService.getFiguresByWorldId(currentUser, worldId);
 	}
 
 	@GetMapping("/{id}")
-	public WorldResponse getWorldById(
-			@AuthenticationPrincipal UserDetails userDetails,
+	public FigureResponse getFigureById(@AuthenticationPrincipal UserDetails userDetails,
 			@PathVariable Long id) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		return worldService.getWorldById(currentUser, id);
+		return figureService.getFigureById(currentUser, id);
 	}
 
 	@PostMapping
-	public WorldResponse createWorld(
-			@AuthenticationPrincipal UserDetails userDetails,
-			@Valid @RequestBody WorldCreateRequest request) {
+	public FigureResponse createFigure(@AuthenticationPrincipal UserDetails userDetails,
+			@RequestBody FigureCreateRequest request) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		return worldService.createWorld(currentUser, request);
+		return figureService.createFigure(currentUser, request);
 	}
 
 	@PatchMapping("/{id}")
-	public WorldResponse updateWorld(
-			@AuthenticationPrincipal UserDetails userDetails,
+	public FigureResponse updateFigureById(@AuthenticationPrincipal UserDetails userDetails,
 			@PathVariable Long id,
-			@Valid @RequestBody WorldUpdateRequest request) {
+			@RequestBody FigureUpdateRequest request) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		return worldService.updateWorld(currentUser, id, request);
+		return figureService.updateFigureById(currentUser, id, request);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Map<String, String>> deleteWorld(
-			@AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<Map<String, String>> deleteFigureById(@AuthenticationPrincipal UserDetails userDetails,
 			@PathVariable Long id) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		worldService.deleteWorld(currentUser, id);
-		return deleteSuccessResponse("World");
+		figureService.deleteFigureById(currentUser, id);
+		return deleteSuccessResponse("Figure");
 	}
 }
