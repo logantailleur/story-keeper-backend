@@ -1,9 +1,14 @@
 package com.app.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +30,22 @@ public class Figure extends BaseEntity {
 	@JoinColumn(name = "world_id", nullable = false)
 	@NotNull(message = "World is required")
 	private World world;
+
+	/**
+	 * Many-to-many relationship with Event.
+	 * 
+	 * IMPORTANT: No cascade operations configured.
+	 * - Deleting an Event will remove join table rows but NOT delete associated Figures
+	 * - Deleting a Figure will remove join table rows but NOT delete associated Events
+	 * This prevents accidental cascade deletion bugs.
+	 */
+	@ManyToMany
+	@JoinTable(
+		name = "figure_events",
+		joinColumns = @JoinColumn(name = "figure_id"),
+		inverseJoinColumns = @JoinColumn(name = "event_id")
+	)
+	private Set<Event> events = new HashSet<>();
 
 	public Figure(String name, FigureType type, String description, World world) {
 		this.name = name;
@@ -66,6 +87,14 @@ public class Figure extends BaseEntity {
 
 	public void setWorld(World world) {
 		this.world = world;
+	}
+
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
 	}
 
 }

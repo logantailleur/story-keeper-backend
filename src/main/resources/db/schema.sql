@@ -43,3 +43,17 @@ CREATE TABLE IF NOT EXISTS figures (
         REFERENCES worlds(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS figure_events (
+    figure_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
+    PRIMARY KEY (figure_id, event_id),
+    CONSTRAINT fk_figure_events_figure
+        FOREIGN KEY (figure_id)
+        REFERENCES figures(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_figure_events_event
+        FOREIGN KEY (event_id)
+        REFERENCES events(id)
+        ON DELETE CASCADE
+);

@@ -71,4 +71,20 @@ public class FigureController extends BaseController {
 		figureService.deleteFigureById(currentUser, id);
 		return deleteSuccessResponse("Figure");
 	}
+
+	@PostMapping("/{figureId}/events/{eventId}")
+	public FigureResponse linkEvent(@AuthenticationPrincipal UserDetails userDetails,
+			@PathVariable Long figureId,
+			@PathVariable Long eventId) {
+		User currentUser = authService.getUserByEmail(userDetails.getUsername());
+		return figureService.linkEvent(currentUser, figureId, eventId);
+	}
+
+	@DeleteMapping("/{figureId}/events/{eventId}")
+	public FigureResponse unlinkEvent(@AuthenticationPrincipal UserDetails userDetails,
+			@PathVariable Long figureId,
+			@PathVariable Long eventId) {
+		User currentUser = authService.getUserByEmail(userDetails.getUsername());
+		return figureService.unlinkEvent(currentUser, figureId, eventId);
+	}
 }

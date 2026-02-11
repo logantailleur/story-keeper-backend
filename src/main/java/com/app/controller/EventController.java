@@ -76,4 +76,20 @@ public class EventController extends BaseController {
 		eventService.deleteEvent(currentUser, id);
 		return deleteSuccessResponse("Event");
 	}
+
+	@PostMapping("/{eventId}/figures/{figureId}")
+	public EventResponse linkFigure(@AuthenticationPrincipal UserDetails userDetails,
+			@PathVariable Long eventId,
+			@PathVariable Long figureId) {
+		User currentUser = authService.getUserByEmail(userDetails.getUsername());
+		return eventService.linkFigure(currentUser, eventId, figureId);
+	}
+
+	@DeleteMapping("/{eventId}/figures/{figureId}")
+	public EventResponse unlinkFigure(@AuthenticationPrincipal UserDetails userDetails,
+			@PathVariable Long eventId,
+			@PathVariable Long figureId) {
+		User currentUser = authService.getUserByEmail(userDetails.getUsername());
+		return eventService.unlinkFigure(currentUser, eventId, figureId);
+	}
 }

@@ -1,9 +1,13 @@
 package com.app.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.AssertTrue;
@@ -26,6 +30,17 @@ public class Event extends BaseEntity {
 	@JoinColumn(name = "world_id", nullable = false)
 	@NotNull(message = "World is required")
 	private World world;
+
+	/**
+	 * Many-to-many relationship with Figure (inverse side).
+	 * 
+	 * IMPORTANT: No cascade operations configured.
+	 * - Deleting an Event will remove join table rows but NOT delete associated Figures
+	 * - Deleting a Figure will remove join table rows but NOT delete associated Events
+	 * This prevents accidental cascade deletion bugs.
+	 */
+	@ManyToMany(mappedBy = "events")
+	private Set<Figure> figures = new HashSet<>();
 
 	public Event(String title, int year, String description, World world) {
 		this.title = title;
@@ -67,6 +82,14 @@ public class Event extends BaseEntity {
 
 	public void setWorld(World world) {
 		this.world = world;
+	}
+
+	public Set<Figure> getFigures() {
+		return figures;
+	}
+
+	public void setFigures(Set<Figure> figures) {
+		this.figures = figures;
 	}
 
 	@AssertTrue(message = "Year must be in the world's timeline range")

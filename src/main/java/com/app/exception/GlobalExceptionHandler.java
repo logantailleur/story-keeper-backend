@@ -19,4 +19,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Map<String, String>> handleInvalidYearException(InvalidYearException ex) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
 	}
+
+	@ExceptionHandler(CrossWorldLinkingException.class)
+	public ResponseEntity<Map<String, String>> handleCrossWorldLinkingException(CrossWorldLinkingException ex) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
+	}
 }
