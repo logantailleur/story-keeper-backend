@@ -2,11 +2,15 @@ package com.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.figure.FigureCreateRequest;
+import com.app.dto.figure.FigurePageResponse;
 import com.app.dto.figure.FigureResponse;
 import com.app.dto.figure.FigureUpdateRequest;
 import com.app.exception.CrossWorldLinkingException;
@@ -58,14 +62,33 @@ public class FigureService {
 		figureRepository.delete(figure);
 	}
 
-	public List<FigureResponse> getFiguresByWorldId(User currentUser, Long worldId) {
+	public List<FigureResponse> getFiguresByWorldId(User currentUser, Long worldId, String search) {
 		World world = getWorld(currentUser, worldId);
-		List<Figure> figures = figureRepository.findByWorldOrderByCreatedAtAsc(world);
+		List<Figure> figures = isSearchActive(search)
+				? figureRepository.findByWorldAndNameOrDescriptionContaining(world, search.trim())
+				: figureRepository.findByWorldOrderByCreatedAtAsc(world);
 		List<FigureResponse> figuresResponse = new ArrayList<>();
 		for (Figure figure : figures) {
 			figuresResponse.add(toResponse(figure));
 		}
 		return figuresResponse;
+	}
+
+	public FigurePageResponse getFiguresByWorldIdPaginated(User currentUser, Long worldId, int page, int limit,
+			String search) {
+		World world = getWorld(currentUser, worldId);
+		Pageable pageable = PageRequest.of(page, limit);
+		var figurePage = isSearchActive(search)
+				? figureRepository.findByWorldAndNameOrDescriptionContaining(world, search.trim(), pageable)
+				: figureRepository.findByWorldOrderByCreatedAtAsc(world, pageable);
+		List<FigureResponse> figuresResponse = figurePage.getContent().stream()
+				.map(this::toResponse)
+				.collect(Collectors.toList());
+		return new FigurePageResponse(figuresResponse, figurePage.getTotalElements(), page, limit);
+	}
+
+	private boolean isSearchActive(String search) {
+		return search != null && !search.isBlank();
 	}
 
 	public FigureResponse getFigureById(User currentUser, Long id) {

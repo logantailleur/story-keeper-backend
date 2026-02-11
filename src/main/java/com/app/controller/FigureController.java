@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.dto.figure.FigureCreateRequest;
+import com.app.dto.figure.FigurePageResponse;
 import com.app.dto.figure.FigureResponse;
 import com.app.dto.figure.FigureUpdateRequest;
 import com.app.model.User;
@@ -35,11 +36,19 @@ public class FigureController extends BaseController {
 	private AuthService authService;
 
 	@GetMapping
-	public List<FigureResponse> getFiguresByWorldId(
+	public Object getFiguresByWorldId(
 			@RequestParam Long worldId,
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer limit,
+			@RequestParam(required = false) String search,
 			@AuthenticationPrincipal UserDetails userDetails) {
 		User currentUser = authService.getUserByEmail(userDetails.getUsername());
-		return figureService.getFiguresByWorldId(currentUser, worldId);
+		if (page != null || limit != null) {
+			int pageNum = page != null ? Math.max(0, page) : 0;
+			int limitNum = limit != null ? Math.min(100, Math.max(1, limit)) : 20;
+			return figureService.getFiguresByWorldIdPaginated(currentUser, worldId, pageNum, limitNum, search);
+		}
+		return figureService.getFiguresByWorldId(currentUser, worldId, search);
 	}
 
 	@GetMapping("/{id}")
