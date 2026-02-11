@@ -1,6 +1,7 @@
 package com.app.dto.figure;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.app.model.FigureType;
 
@@ -16,18 +17,21 @@ public class FigureResponse {
 
 	private Long worldId;
 
+	private List<Long> eventIds;
+
 	private LocalDateTime createdAt;
 
 	private LocalDateTime updatedAt;
 
 	public FigureResponse(Long id, String name, FigureType type, String description, Long worldId,
-			LocalDateTime createdAt,
+			List<Long> eventIds, LocalDateTime createdAt,
 			LocalDateTime updatedAt) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.description = description;
 		this.worldId = worldId;
+		this.eventIds = eventIds;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -86,5 +90,13 @@ public class FigureResponse {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<Long> getEventIds() {
+		return eventIds;
+	}
+
+	public void setEventIds(List<Long> eventIds) {
+		this.eventIds = eventIds;
 	}
 }

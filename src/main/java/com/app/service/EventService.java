@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dto.event.EventCreateRequest;
 import com.app.dto.event.EventResponse;
@@ -87,6 +88,7 @@ public class EventService {
 		eventRepository.delete(event);
 	}
 
+	@Transactional
 	public EventResponse linkFigure(User currentUser, Long eventId, Long figureId) {
 		Event event = getEvent(eventId);
 		getWorld(currentUser, event.getWorld().getId());
@@ -103,6 +105,7 @@ public class EventService {
 		return toResponse(eventRepository.findById(eventId).orElse(event));
 	}
 
+	@Transactional
 	public EventResponse unlinkFigure(User currentUser, Long eventId, Long figureId) {
 		Event event = getEvent(eventId);
 		getWorld(currentUser, event.getWorld().getId());

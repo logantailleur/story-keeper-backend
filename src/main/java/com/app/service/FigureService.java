@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dto.figure.FigureCreateRequest;
 import com.app.dto.figure.FigurePageResponse;
@@ -37,6 +38,7 @@ public class FigureService {
 	@Autowired
 	private EventRepository eventRepository;
 
+	@Transactional
 	public FigureResponse createFigure(User currentUser, FigureCreateRequest request) {
 		World world = getWorld(currentUser, request.getWorldId());
 		Figure figure = new Figure();
@@ -47,6 +49,7 @@ public class FigureService {
 		return toResponse(figureRepository.save(figure));
 	}
 
+	@Transactional
 	public FigureResponse updateFigureById(User currentUser, Long id, FigureUpdateRequest request) {
 		Figure figure = getFigure(id);
 		getWorld(currentUser, figure.getWorld().getId());
@@ -62,6 +65,7 @@ public class FigureService {
 		figureRepository.delete(figure);
 	}
 
+	@Transactional(readOnly = true)
 	public List<FigureResponse> getFiguresByWorldId(User currentUser, Long worldId, String search) {
 		World world = getWorld(currentUser, worldId);
 		List<Figure> figures = isSearchActive(search)
@@ -74,6 +78,7 @@ public class FigureService {
 		return figuresResponse;
 	}
 
+	@Transactional(readOnly = true)
 	public FigurePageResponse getFiguresByWorldIdPaginated(User currentUser, Long worldId, int page, int limit,
 			String search) {
 		World world = getWorld(currentUser, worldId);
@@ -91,12 +96,14 @@ public class FigureService {
 		return search != null && !search.isBlank();
 	}
 
+	@Transactional(readOnly = true)
 	public FigureResponse getFigureById(User currentUser, Long id) {
 		Figure figure = getFigure(id);
 		getWorld(currentUser, figure.getWorld().getId());
 		return toResponse(figure);
 	}
 
+	@Transactional
 	public FigureResponse linkEvent(User currentUser, Long figureId, Long eventId) {
 		Figure figure = getFigure(figureId);
 		getWorld(currentUser, figure.getWorld().getId());
@@ -109,6 +116,7 @@ public class FigureService {
 		return toResponse(figureRepository.save(figure));
 	}
 
+	@Transactional
 	public FigureResponse unlinkEvent(User currentUser, Long figureId, Long eventId) {
 		Figure figure = getFigure(figureId);
 		getWorld(currentUser, figure.getWorld().getId());
@@ -128,8 +136,11 @@ public class FigureService {
 	}
 
 	private FigureResponse toResponse(Figure figure) {
+		List<Long> eventIds = figure.getEvents().stream()
+				.map(Event::getId)
+				.collect(Collectors.toList());
 		return new FigureResponse(figure.getId(), figure.getName(), figure.getType(), figure.getDescription(),
-				figure.getWorld().getId(), figure.getCreatedAt(), figure.getUpdatedAt());
+				figure.getWorld().getId(), eventIds, figure.getCreatedAt(), figure.getUpdatedAt());
 	}
 
 	private World getWorld(User currentUser, Long worldId) {
