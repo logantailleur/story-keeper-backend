@@ -5,6 +5,8 @@ import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -20,6 +22,7 @@ public class Figure extends BaseEntity {
 	@Column(name = "name", nullable = false, length = 255)
 	private String name;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private FigureType type;
 
