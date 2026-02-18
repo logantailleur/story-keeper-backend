@@ -1,6 +1,5 @@
 package com.app.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.dto.figure.FigureCreateRequest;
-import com.app.dto.figure.FigurePageResponse;
 import com.app.dto.figure.FigureResponse;
 import com.app.dto.figure.FigureUpdateRequest;
 import com.app.model.User;
