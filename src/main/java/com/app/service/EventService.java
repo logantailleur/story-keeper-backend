@@ -41,6 +41,7 @@ public class EventService {
 		event.setTitle(request.getTitle());
 		event.setYear(request.getYear());
 		event.setDescription(request.getDescription());
+		event.setImportance(request.getImportance());
 		event.setWorld(world);
 		return toResponse(eventRepository.save(event));
 	}
@@ -71,6 +72,9 @@ public class EventService {
 		}
 		if (request.getDescription() != null) {
 			event.setDescription(request.getDescription());
+		}
+		if (request.getImportance() != null) {
+			event.setImportance(request.getImportance());
 		}
 
 		Integer reqYear = request.getYear();
@@ -135,7 +139,7 @@ public class EventService {
 
 	private EventResponse toResponse(Event event) {
 		return new EventResponse(event.getId(), event.getTitle(), event.getYear(), event.getDescription(),
-				event.getWorld().getId(), event.getCreatedAt(), event.getUpdatedAt());
+				event.getImportance(), event.getWorld().getId(), event.getCreatedAt(), event.getUpdatedAt());
 	}
 
 	private World getWorld(User currentUser, Long worldId) {

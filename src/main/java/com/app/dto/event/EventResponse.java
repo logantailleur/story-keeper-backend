@@ -1,5 +1,6 @@
 package com.app.dto.event;
 
+import com.app.model.Importance;
 import java.time.LocalDateTime;
 
 public class EventResponse {
@@ -12,18 +13,21 @@ public class EventResponse {
 
 	private String description;
 
+	private Importance importance;
+
 	private Long worldId;
 
 	private LocalDateTime createdAt;
 
 	private LocalDateTime updatedAt;
 
-	public EventResponse(Long id, String title, int year, String description, Long worldId, LocalDateTime createdAt,
-			LocalDateTime updatedAt) {
+	public EventResponse(Long id, String title, int year, String description, Importance importance, Long worldId,
+			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.id = id;
 		this.title = title;
 		this.year = year;
 		this.description = description;
+		this.importance = importance;
 		this.worldId = worldId;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -59,6 +63,14 @@ public class EventResponse {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Importance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(Importance importance) {
+		this.importance = importance;
 	}
 
 	public Long getWorldId() {

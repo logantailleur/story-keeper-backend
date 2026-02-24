@@ -5,6 +5,8 @@ import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -25,6 +27,10 @@ public class Event extends BaseEntity {
 
 	@Column(name = "description", length = 1000)
 	private String description;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "importance")
+	private Importance importance;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "world_id", nullable = false)
@@ -74,6 +80,14 @@ public class Event extends BaseEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Importance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(Importance importance) {
+		this.importance = importance;
 	}
 
 	public World getWorld() {

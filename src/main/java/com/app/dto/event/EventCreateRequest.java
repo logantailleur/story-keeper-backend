@@ -1,5 +1,6 @@
 package com.app.dto.event;
 
+import com.app.model.Importance;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,8 @@ public class EventCreateRequest {
 
 	@NotNull(message = "World ID is required")
 	private Long worldId;
+
+	private Importance importance;
 
 	public String getTitle() {
 		return title;
@@ -52,5 +55,13 @@ public class EventCreateRequest {
 
 	public void setWorldId(Long worldId) {
 		this.worldId = worldId;
+	}
+
+	public Importance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(Importance importance) {
+		this.importance = importance;
 	}
 }
