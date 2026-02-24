@@ -96,9 +96,13 @@ public class AppConfig {
 			String host = uri.getHost();
 			int port = uri.getPort() == -1 ? 5432 : uri.getPort();
 			String path = uri.getPath();
-			String db = (path != null && path.startsWith("/")) ? path.substring(1) : path;
+			String db = (path != null && path.startsWith("/")) ? path.substring(1) : (path != null ? path : "");
+			String query = uri.getQuery();
 
 			String jdbcUrl = String.format("jdbc:postgresql://%s:%d/%s", host, port, db);
+			if (StringUtils.hasText(query)) {
+				jdbcUrl = jdbcUrl + "?" + query;
+			}
 
 			return DataSourceBuilder.create()
 					.url(jdbcUrl)

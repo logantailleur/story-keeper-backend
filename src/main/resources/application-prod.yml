@@ -2,8 +2,9 @@ spring:
     application:
         name: story-keeper-backend
 
-    # Database Configuration
-    # Database connection configured via DATABASE_URL or individual DB_* variables
+    # Database Configuration (prod)
+    # Set DATABASE_URL in Vercel env (Neon): postgresql://user:pass@host:port/db?sslmode=require
+    # Or use DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD
 
     jpa:
         open-in-view: false # Disable Open Session In View pattern

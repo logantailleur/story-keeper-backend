@@ -2,11 +2,9 @@ spring:
     application:
         name: story-keeper-backend
 
-    # Database Configuration
-    # Database connection is configured via:
-    # - spring.datasource.url (explicit JDBC URL, good for local overrides)
-    # - DATABASE_URL (Render/Heroku style: postgres://user:pass@host:port/db)
-    # - Individual variables: DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD
+    # Database Configuration (dev)
+    # Set DATABASE_URL (e.g. Neon from Vercel): postgresql://user:pass@host:port/db?sslmode=require
+    # Or use spring.datasource.url / DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD
 
     jpa:
         open-in-view: false # Disable Open Session In View pattern
