@@ -1,5 +1,6 @@
 package com.app.dto.event;
 
+import com.app.model.Importance;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
@@ -13,6 +14,8 @@ public class EventUpdateRequest {
 
 	@Size(max = 1000, message = "Description must be less than 1000 characters")
 	private String description;
+
+	private Importance importance;
 
 	public String getTitle() {
 		return title;
@@ -36,5 +39,13 @@ public class EventUpdateRequest {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Importance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(Importance importance) {
+		this.importance = importance;
 	}
 }
